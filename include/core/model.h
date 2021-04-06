@@ -13,7 +13,18 @@ class Model {
 
   void Train();
 
+  // saving
+  friend std::ostream& operator<<(std::ostream& os, const Model& model);
+
+  // loading
+  friend std::istream& operator>>(std::istream& is, Model& model);
+
  private:
+  const char kProbDelim = '&';
+  const char kShadeDelim = ',';
+  const char kPixelDelim = '|';
+  const char kLabelDelim = '*';
+
   const double kLaplaceSmoothing = 1.0;
 
   // Possible values: Shaded = 1 or Unshaded = 0
