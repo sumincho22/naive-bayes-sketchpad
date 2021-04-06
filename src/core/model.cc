@@ -6,15 +6,28 @@ namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) { }
 
-//for (size_t i = 0; i < image_size_; ++i) {
-//for (size_t j = 0; j < image_size_; ++j) {
-//for (size_t shade = kUnshaded; shade <= kShaded; ++shade) {
-//for (size_t label = 0; label < labels_.size(); ++label) {
-//
-//}
-//}
-//}
-//}
+void Model::Train() {
+  StorePriorProbs();
+  StoreFeatureProbs();
+}
+
+void Model::StorePriorProbs() {
+  for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
+    prior_probs_[label] = CalcPriorProb(label);
+  }
+}
+
+void Model::StoreFeatureProbs() {
+  for (size_t i = 0; i < data_.GetImageSize(); ++i) {
+    for (size_t j = 0; j < data_.GetImageSize(); ++j) {
+      for (size_t shade = 0; shade <= kNumShades; ++shade) {
+        for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
+          feature_probs_[i][j][shade][label] = CalcFeatureProb(i, j, shade, label);
+        }
+      }
+    }
+  }
+}
 
 double Model::CalcPriorProb(const size_t label) {
   double numerator = kLaplaceSmoothing + data_.GetNumImagesInClass(label);
