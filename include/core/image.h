@@ -11,7 +11,7 @@ class Image {
 
   size_t GetLabel() const;
 
-  std::vector<std::vector<size_t>> GetPixels();
+  std::vector<std::vector<size_t>> GetPixels() const;
 
  private:
   size_t label_;

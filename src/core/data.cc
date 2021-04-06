@@ -51,27 +51,15 @@ double Data::GetNumImagesInClass(const size_t label) const {
   return num_images_in_class;
 }
 
-//void Data::UpdateNumImagesInPixel() {
-//  for (size_t i = 0; i < image_size_; ++i) {
-//    for (size_t j = 0; j < image_size_; ++j) {
-//      for (size_t label = 0; label < num_images_in_class_.size(); ++label) {
-//        std::vector<Image> images_in_class;
-//        for (const Image& image : images_) {
-//          if (image.GetLabel() == label) {
-//            images_in_class.emplace_back(image);
-//          }
-//        }
-//        for (Image image_in_class : images_in_class) {
-//          if (image_in_class.GetPixels()[i][j] == kShaded) {
-//            num_images_in_pixel_[i][j][label][kShaded]++;
-//          } else {
-//            num_images_in_pixel_[i][j][label][kUnshaded]++;
-//          }
-//        }
-//      }
-//    }
-//  }
-//}
+double Data::GetCount(const size_t i, const size_t j, const size_t shade, const size_t label) const {
+  double num_images = 0;
+  for (const Image& image : images_) {
+    if (image.GetLabel() == label && image.GetPixels()[i][j] == shade) {
+      num_images++;
+    }
+  }
+  return num_images;
+}
 
 void Data::AddLabels(const size_t label) {
   if (std::count(labels_.begin(), labels_.end(), label) == 0) {

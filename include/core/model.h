@@ -18,8 +18,8 @@ class Model {
  private:
   const double kLaplaceSmoothing = 1.0;
 
-  // Shaded or Unshaded
-  const double kPossibleValues = 2.0;
+  // Possible values: Shaded = 1 or Unshaded = 0
+  const double kNumShades = 2.0;
 
   Data data_;
 

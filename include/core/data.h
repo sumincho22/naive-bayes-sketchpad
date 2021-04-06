@@ -8,8 +8,6 @@ namespace naivebayes {
 
 class Data {
  public:
-//  std::vector<std::vector<std::vector<std::vector<double>>>> num_images_in_pixel_;
-
   Data(const size_t image_size);
 
   double GetNumImagesInClass(const size_t label) const;
@@ -19,6 +17,8 @@ class Data {
   const std::vector<Image>& GetImages() const;
 
   const std::vector<size_t>& GetLabels() const;
+
+  double GetCount(const size_t i, const size_t j, const size_t shade, const size_t label) const;
 
   friend std::istream& operator>>(std::istream& is, Data& data);
 

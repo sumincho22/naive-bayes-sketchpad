@@ -11,7 +11,7 @@ size_t Image::GetLabel() const {
   return label_;
 }
 
-std::vector<std::vector<size_t>> Image::GetPixels() {
+std::vector<std::vector<size_t>> Image::GetPixels() const {
   return pixels_;
 }
 
