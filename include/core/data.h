@@ -10,13 +10,20 @@ class Data {
  public:
   Data(const size_t image_size);
 
-  friend std::istream& operator>>(std::istream& is, Data data);
+  size_t GetImageSize() const;
 
-  std::vector<std::vector<size_t>> GetPixelShades(std::vector<std::string> pixels);
+  const std::vector<Image>& GetImages() const;
+
+  friend std::istream& operator>>(std::istream& is, Data& data);
 
  private:
+  size_t kUnshaded = 0;
+  size_t kShaded = 1;
+
   size_t image_size_;
   std::vector<Image> images_;
+
+  std::vector<std::vector<size_t>> GetPixelShades(std::vector<std::string>& pixels) const;
 
 };
 

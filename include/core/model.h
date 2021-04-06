@@ -11,6 +11,9 @@ class Model {
   Model();
 
  private:
+  void CalcPriorProb(const size_t label);
+
+  void CalcFeatureProb();
 
 };
 
