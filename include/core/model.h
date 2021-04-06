@@ -10,8 +10,6 @@ class Model {
  public:
   Model();
 
-  friend std::ostream& operator<<(std::ostream& os, const std::vector<Image>& images);
-
  private:
 
 };

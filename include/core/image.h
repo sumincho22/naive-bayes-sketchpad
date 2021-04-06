@@ -5,11 +5,14 @@ namespace naivebayes {
 
 class Image {
  public:
-  Image();
+  Image(size_t label, const std::vector<std::vector<size_t>>& pixels);
 
-  friend std::ostream& operator<<(std::ostream& os, const Image& image);
+  size_t GetLabel();
+
+  std::vector<std::vector<size_t>> GetPixels();
 
  private:
+  size_t label_;
   std::vector<std::vector<size_t>> pixels_;
 
 };
