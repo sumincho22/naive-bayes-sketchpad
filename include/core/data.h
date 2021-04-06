@@ -16,6 +16,8 @@ class Data {
   size_t image_size_;
   std::vector<Image> images_;
 
+  std::vector<std::vector<size_t>> GetPixelShades(std::vector<std::string> pixels);
+
 };
 
 }
