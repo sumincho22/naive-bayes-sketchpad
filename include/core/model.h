@@ -3,17 +3,23 @@
 #include <ostream>
 
 #include "image.h"
+#include "data.h"
 
 namespace naivebayes {
 
 class Model {
  public:
-  Model();
+  Model(Data data);
 
  private:
-  void CalcPriorProb(const size_t label);
+  const double kValue = 1.0;
+  const double kPossibleValues = 2.0;
 
-  void CalcFeatureProb();
+  Data data_;
+
+  double CalcPriorProb(const size_t label);
+
+  double CalcFeatureProb(const size_t shade, const size_t label);
 
 };
 

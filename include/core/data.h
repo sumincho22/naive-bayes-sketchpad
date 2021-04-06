@@ -8,7 +8,11 @@ namespace naivebayes {
 
 class Data {
  public:
+  std::vector<size_t> num_images_in_class_;
+
   Data(const size_t image_size);
+
+  const std::vector<std::vector<std::vector<std::vector<size_t>>>>& GetNumImagesInPixel() const;
 
   size_t GetImageSize() const;
 

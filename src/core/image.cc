@@ -7,7 +7,7 @@ Image::Image(size_t label, const std::vector<std::vector<size_t>>& pixels) {
   pixels_ = pixels;
 }
 
-size_t Image::GetLabel() {
+size_t Image::GetLabel() const {
   return label_;
 }
 

@@ -9,7 +9,7 @@ class Image {
  public:
   Image(size_t label, const std::vector<std::vector<size_t>>& pixels);
 
-  size_t GetLabel();
+  size_t GetLabel() const;
 
   std::vector<std::vector<size_t>> GetPixels();
 
