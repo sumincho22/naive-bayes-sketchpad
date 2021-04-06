@@ -9,7 +9,7 @@ Data::Data(const size_t image_size) {
   image_size_ = image_size;
 }
 
-std::istream& operator>>(std::istream& is, const Data& data) {
+std::istream& operator>>(std::istream& is, Data data) {
   std::string line;
   while (is.good()) {
     std::getline(is, line);
@@ -19,7 +19,7 @@ std::istream& operator>>(std::istream& is, const Data& data) {
       std::getline(is, line);
       pixels.emplace_back(line);
     }
-    //data.images_.emplace_back(Image(label, ));
+    data.images_.emplace_back(Image(label, data.GetPixelShades(pixels)));
   }
   return is;
 }
