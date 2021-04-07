@@ -1,10 +1,14 @@
 #include "core/model.h"
 
 #include <utility>
+#include <string>
 
 namespace naivebayes {
 
-Model::Model(Data data) : data_(std::move(data)) { }
+Model::Model(Data data) : data_(std::move(data)) {
+  feature_probs_ = std::vector<std::vector<std::vector<std::vector<double>>>>();
+  prior_probs_ = std::vector<double>();
+}
 
 void Model::Train() {
   StorePriorProbs();
@@ -41,6 +45,43 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
   return os;
 }
 
+std::istream& operator>>(std::istream& is, Model& model) {
+  std::string line;
+
+  // Loading prior probabilities
+  while (std::getline(is, line) && line[0] == model.kProbDelim) {
+    model.prior_probs_.push_back(std::stoi(line));
+  }
+
+  size_t label = 0;
+  size_t i = 0;
+  while (std::getline(is, line)) {
+    if (line[0] == model.kLabelDelim) {
+      label++;
+      i = 0;
+      continue;
+    }
+
+    std::vector<std::string> pixels;
+    model.Split(line, model.kPixelDelim, pixels);
+    size_t j = 0;
+    for (const std::string& pixel : pixels) {
+      std::vector<std::string> shades;
+      model.Split(pixel, model.kShadeDelim, shades);
+
+      size_t shade_count = 0;
+      for (const std::string& shade : shades) {
+        double feature_prob = std::stod(shade);
+        model.feature_probs_[i][j][shade_count][label] = feature_prob;
+        shade_count++;
+      }
+      j++;
+    }
+    i++;
+  }
+  return is;
+}
+
 void Model::StorePriorProbs() {
   for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
     prior_probs_[label] = CalcPriorProb(label);
@@ -69,6 +110,16 @@ double Model::CalcFeatureProb(const size_t i, const size_t j, const size_t shade
   double numerator = kLaplaceSmoothing + data_.GetCount(i, j, shade, label);
   double denominator = kNumShades * kLaplaceSmoothing + data_.GetNumImagesInClass(label);
   return numerator / denominator;
+}
+
+void Model::Split(const std::string& str, const char delim, std::vector<std::string>& out) {
+  size_t start;
+  size_t end = 0;
+
+  while ((start = str.find_first_not_of(delim, end)) != std::string::npos) {
+    end = str.find(delim, start);
+    out.push_back(str.substr(start, end - start));
+  }
 }
 
 }

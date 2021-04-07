@@ -43,6 +43,9 @@ class Model {
 
   double CalcFeatureProb(const size_t i, const size_t j, const size_t shade, const size_t label);
 
+  // https://www.techiedelight.com/split-string-cpp-using-delimiter/
+  void Split(const std::string& str, const char delim, std::vector<std::string>& out);
+
 };
 
 }  // namespace naivebayes
