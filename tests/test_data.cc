@@ -2,12 +2,22 @@
 
 #include "core/image.h"
 #include "core/data.h"
-#include "core/model.h"
+
+const size_t kUnshaded = 0;
+const size_t kShaded = 1;
 
 const size_t kImageSize = 3;
 const size_t kNumImages = 4;
 const size_t kLabel = 1;
 const size_t kNumLabels = 3;
+
+TEST_CASE("Data operator overload", "[operator]") {
+  SECTION("Overloading empty dataset throws error") {
+    naivebayes::Data empty_data(0);
+    std::ifstream empty_file("../../../data/emptydata.txt");
+    REQUIRE_THROWS(empty_file >> empty_data);
+  }
+}
 
 TEST_CASE("Images in dataset", "[images]") {
   naivebayes::Data data(kImageSize);
@@ -35,10 +45,14 @@ TEST_CASE("Labels in dataset", "[labels]") {
   SECTION("Check number of labels") {
     REQUIRE(data.GetLabels().size() == kNumLabels);
   }
+}
 
-  SECTION("Check number of labels in empty dataset") {
-    naivebayes::Data empty_data(0);
-    std::ifstream empty_file("../../../data/emptydata.txt");
-    REQUIRE_THROWS(empty_file >> empty_data);
+TEST_CASE("Test GetCount") {
+  naivebayes::Data data(kImageSize);
+  std::ifstream input_file("../../../data/testdata.txt");
+  input_file >> data;
+
+  SECTION("Test 1") {
+    REQUIRE(data.GetCount(0, 0, kUnshaded, kLabel) == 1);
   }
 }
