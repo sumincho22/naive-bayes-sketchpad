@@ -27,14 +27,14 @@ TEST_CASE("Train", "[train]") {
   }
 
   SECTION("Feature probabilities are properly stored") {
-
+    REQUIRE(model.GetFeatureProbs()[0][0][1][1] == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[0][1][1][1] == Approx(0.67).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[0][2][1][1] == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[1][0][1][1] == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[1][1][1][1] == Approx(0.67).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[1][2][1][1] == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[2][0][1][1] == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[2][1][1][1] == Approx(0.67).epsilon(.01));
+    REQUIRE(model.GetFeatureProbs()[2][2][1][1] == Approx(0.33).epsilon(.01));
   }
-}
-
-TEST_CASE("Operator<<", "[op<<]") {
-
-}
-
-TEST_CASE("Operator>>", "[op>>]") {
-
 }
