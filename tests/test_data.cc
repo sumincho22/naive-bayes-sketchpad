@@ -4,35 +4,41 @@
 #include "core/data.h"
 #include "core/model.h"
 
-TEST_CASE("Data") {
-  SECTION("test data") {
-    naivebayes::Data data(3);
-    std::ifstream input_file("../../../data/testdata.txt");
-    input_file >> data;
-    REQUIRE(data.GetImages().size() == 3);
+const size_t kImageSize = 3;
+const size_t kNumImages = 4;
+const size_t kLabel = 1;
+const size_t kNumLabels = 3;
+
+TEST_CASE("Images in dataset", "[images]") {
+  naivebayes::Data data(kImageSize);
+  std::ifstream input_file("../../../data/testdata.txt");
+  input_file >> data;
+
+  SECTION("Check number of images") {
+    REQUIRE(data.GetImages().size() == kNumImages);
   }
 
-  SECTION("Calculate Prior Probability") {
-    naivebayes::Data data(3);
-    std::ifstream input_file("../../../data/testdata.txt");
-    input_file >> data;
-    naivebayes::Model model(data);
-    // REQUIRE(model.CalcPriorProb(1) == (1.0 / 3.0));
+  SECTION("GetNumImagesInClass method") {
+    REQUIRE(data.GetNumImagesInClass(kLabel) == 2);
   }
 
-  SECTION("Calculate Feature Probability") {
-    naivebayes::Data data(3);
-    std::ifstream input_file("../../../data/testdata.txt");
-    input_file >> data;
-    naivebayes::Model model(data);
-    // REQUIRE(model.CalcFeatureProb(0, 0, 0, 0) == (1.0 / 3.0));
+  SECTION("Check image size") {
+    REQUIRE(data.GetImageSize() == kImageSize);
+  }
+}
+
+TEST_CASE("Labels in dataset", "[labels]") {
+  naivebayes::Data data(kImageSize);
+  std::ifstream input_file("../../../data/testdata.txt");
+  input_file >> data;
+
+  SECTION("Check number of labels") {
+    REQUIRE(data.GetLabels().size() == kNumLabels);
   }
 
- SECTION("actual data") {
-    naivebayes::Data data(28);
-    std::ifstream input_file("../../../data/trainingimagesandlabels.txt");
-    input_file >> data;
-    REQUIRE(data.GetImages().size() == 5000);
- }
-
+  SECTION("Check number of labels in empty dataset") {
+    naivebayes::Data empty_data(0);
+    std::ifstream empty_file("../../../data/emptydata.txt");
+    REQUIRE_THROWS(empty_file >> empty_data);
+  }
 }

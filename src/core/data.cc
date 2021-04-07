@@ -2,16 +2,23 @@
 
 #include <string>
 
+#define ERROR_MESSAGE "Data is empty"
+
 namespace naivebayes {
 
 Data::Data(const size_t image_size) {
   image_size_ = image_size;
+  images_ = std::vector<Image>();
+  labels_ = std::vector<size_t>();
 }
 
 std::istream& operator>>(std::istream& is, Data& data) {
   std::string line;
   while (is.good()) {
     std::getline(is, line);
+    if (line.empty()) {
+      throw std::invalid_argument(ERROR_MESSAGE);
+    }
     size_t label = std::stoi(line);
     data.AddLabels(label);
     std::vector<std::string> pixel_lines;
