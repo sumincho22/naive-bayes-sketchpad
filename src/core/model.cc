@@ -122,4 +122,10 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
+const std::vector<double>& Model::GetPriorProbs() const { return prior_probs_; }
+
+const std::vector<std::vector<std::vector<std::vector<double>>>> & Model::GetFeatureProbs() const {
+  return feature_probs_;
+}
+
 }

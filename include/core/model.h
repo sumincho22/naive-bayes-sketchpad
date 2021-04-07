@@ -19,6 +19,10 @@ class Model {
   // loading
   friend std::istream& operator>>(std::istream& is, Model& model);
 
+  const std::vector<double>& GetPriorProbs() const;
+
+  const std::vector<std::vector<std::vector<std::vector<double>>>>& GetFeatureProbs() const;
+
  private:
   const char kProbDelim = '&';
   const char kShadeDelim = ',';
