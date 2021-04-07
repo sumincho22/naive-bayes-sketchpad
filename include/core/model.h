@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <map>
 
 #include "image.h"
 #include "data.h"
@@ -19,7 +20,7 @@ class Model {
   // loading
   friend std::istream& operator>>(std::istream& is, Model& model);
 
-  const std::vector<double>& GetPriorProbs() const;
+  const std::map<size_t, double>& GetPriorProbs() const;
 
   const std::vector<std::vector<std::vector<std::vector<double>>>>& GetFeatureProbs() const;
 
@@ -36,7 +37,7 @@ class Model {
 
   Data data_;
 
-  std::vector<double> prior_probs_;
+  std::map<size_t, double> prior_probs_;
   std::vector<std::vector<std::vector<std::vector<double>>>> feature_probs_;
 
   void StorePriorProbs();

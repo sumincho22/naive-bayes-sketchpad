@@ -2,12 +2,12 @@
 
 #include <utility>
 #include <string>
+#include <iostream>
 
 namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) {
   feature_probs_ = std::vector<std::vector<std::vector<std::vector<double>>>>();
-  prior_probs_ = std::vector<double>();
 }
 
 void Model::Train() {
@@ -16,8 +16,8 @@ void Model::Train() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Model& model) {
-  for (const double& prior_prob : model.prior_probs_) {
-    os << prior_prob << std::endl;
+  for (const auto& prior_prob : model.prior_probs_) {
+    os << prior_prob.second << std::endl;
   }
 
   os << model.kProbDelim;
@@ -47,10 +47,14 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
 
 std::istream& operator>>(std::istream& is, Model& model) {
   std::string line;
+  model.prior_probs_.clear();
 
   // Loading prior probabilities
+  size_t index = 0;
   while (std::getline(is, line) && line[0] == model.kProbDelim) {
-    model.prior_probs_.push_back(std::stoi(line));
+    size_t label = model.data_.GetLabels()[index];
+    model.prior_probs_.insert(std::make_pair(label, std::stod(line)));
+    index++;
   }
 
   size_t label = 0;
@@ -83,8 +87,9 @@ std::istream& operator>>(std::istream& is, Model& model) {
 }
 
 void Model::StorePriorProbs() {
-  for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
-    prior_probs_[label] = CalcPriorProb(label);
+  for (const size_t label : data_.GetLabels()) {
+    std::cout << label << std::endl;
+    prior_probs_.insert(std::make_pair(label,  CalcPriorProb(label)));
   }
 }
 
@@ -122,7 +127,7 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
-const std::vector<double>& Model::GetPriorProbs() const { return prior_probs_; }
+const std::map<size_t, double>& Model::GetPriorProbs() const { return prior_probs_; }
 
 const std::vector<std::vector<std::vector<std::vector<double>>>> & Model::GetFeatureProbs() const {
   return feature_probs_;
