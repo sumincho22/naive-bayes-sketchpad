@@ -8,16 +8,40 @@
 
 namespace naivebayes {
 
+/**
+ * This class is a training model responsible for calculating probabilities and storing it. This class also
+ * saves and loads data.
+ */
 class Model {
  public:
+  /**
+   * Creates a training model with the given dataset.
+   *
+   * @param data the dataset of the input file
+   */
   Model(Data data);
 
+  /**
+   * Trains the model.
+   */
   void Train();
 
-  // saving
+  /**
+   * Saves the probabilities by writing them onto a .txt file
+   *
+   * @param os      output stream
+   * @param model   the Model
+   * @return        updated output stream
+   */
   friend std::ostream& operator<<(std::ostream& os, const Model& model);
 
-  // loading
+  /**
+   * Loads the probabilities by reading the saved data from the .txt file
+   *
+   * @param is      input stream
+   * @param model   the Model to modify
+   * @return        updated input stream
+   */
   friend std::istream& operator>>(std::istream& is, Model& model);
 
   const std::map<size_t, double>& GetPriorProbs() const;

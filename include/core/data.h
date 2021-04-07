@@ -13,7 +13,7 @@ namespace naivebayes {
 class Data {
  public:
   /**
-   * Creates a constructor for the Data
+   * Creates a Data object
    *
    * @param image_size the size of the square image in dataset
    */
