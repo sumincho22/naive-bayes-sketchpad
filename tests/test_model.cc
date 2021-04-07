@@ -27,7 +27,7 @@ TEST_CASE("Train", "[train]") {
   }
 
   SECTION("Feature probabilities are properly stored") {
-    
+
   }
 }
 
