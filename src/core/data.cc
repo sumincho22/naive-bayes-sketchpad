@@ -38,10 +38,10 @@ std::vector<std::vector<size_t>> Data::GetPixelShades(std::vector<std::string>& 
       switch(pixel_lines[i].at(j)) {
         case '+':
         case '#':
-          pixel_shades[i][j] = kShaded;
+          pixel_shades[i][j] = Pixel::kShaded;
           break;
         default:
-          pixel_shades[i][j] = kUnshaded;
+          pixel_shades[i][j] = Pixel::kUnshaded;
       }
     }
   }
@@ -61,7 +61,7 @@ double Data::GetNumImagesInClass(const size_t label) const {
 double Data::GetCount(const size_t i, const size_t j, const size_t shade, const size_t label) const {
   double num_images = 0;
   for (const Image& image : images_) {
-    if (image.GetLabel() == label && image.GetPixels()[i][j] == shade) {
+    if (image.GetLabel() == label && image.GetShade(i, j) == shade) {
       num_images++;
     }
   }

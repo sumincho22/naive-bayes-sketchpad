@@ -2,6 +2,7 @@
 
 #include <fstream>
 
+#include "pixel.h"
 #include "image.h"
 
 namespace naivebayes {
@@ -48,10 +49,6 @@ class Data {
   friend std::istream& operator>>(std::istream& is, Data& data);
 
  private:
-  // Shade values
-  const size_t kUnshaded = 0;
-  const size_t kShaded = 1;
-
   size_t image_size_;
   std::vector<Image> images_;
   std::vector<size_t> labels_;
