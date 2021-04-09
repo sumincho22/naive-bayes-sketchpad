@@ -20,7 +20,7 @@ class Image {
 
   size_t GetLabel() const;
 
-  std::vector<std::vector<size_t>> GetPixels() const;
+  size_t Image::GetShade(const size_t row, const size_t col) const;
 
  private:
   size_t label_;
