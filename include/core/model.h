@@ -8,6 +8,8 @@
 
 namespace naivebayes {
 
+using QuadVector = std::vector<std::vector<std::vector<std::vector<double>>>>;
+
 /**
  * This class is a training model responsible for calculating probabilities and storing it. This class also
  * saves and loads data.
@@ -46,9 +48,10 @@ class Model {
 
   const std::map<size_t, double>& GetPriorProbs() const;
 
-  const std::vector<std::vector<std::vector<std::vector<double>>>>& GetFeatureProbs() const;
+  const QuadVector& GetFeatureProbs() const;
 
  private:
+  // Delimiters
   const char kProbDelim = '&';
   const char kShadeDelim = ',';
   const char kPixelDelim = '|';
@@ -56,13 +59,13 @@ class Model {
 
   const double kLaplaceSmoothing = 1.0;
 
-  // Possible values: Shaded = 1 or Unshaded = 0
+  // Possible values: Shaded or Unshaded
   const double kNumShades = 2.0;
 
   Data data_;
 
   std::map<size_t, double> prior_probs_;
-  std::vector<std::vector<std::vector<std::vector<double>>>> feature_probs_;
+  QuadVector feature_probs_;
 
   void StorePriorProbs();
 

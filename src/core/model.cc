@@ -2,12 +2,11 @@
 
 #include <utility>
 #include <string>
-#include <iostream>
 
 namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) {
-  feature_probs_ = std::vector<std::vector<std::vector<std::vector<double>>>>();
+  feature_probs_ = QuadVector();
 }
 
 void Model::Train() {
