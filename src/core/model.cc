@@ -88,7 +88,6 @@ std::istream& operator>>(std::istream& is, Model& model) {
 
 void Model::StorePriorProbs() {
   for (const size_t label : data_.GetLabels()) {
-    std::cout << label << std::endl;
     prior_probs_.insert(std::make_pair(label,  CalcPriorProb(label)));
   }
 }
@@ -96,7 +95,7 @@ void Model::StorePriorProbs() {
 void Model::StoreFeatureProbs() {
   for (size_t i = 0; i < data_.GetImageSize(); ++i) {
     for (size_t j = 0; j < data_.GetImageSize(); ++j) {
-      for (size_t shade = 0; shade <= kNumShades; ++shade) {
+      for (size_t shade = 0; shade < kNumShades; ++shade) {
         for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
           feature_probs_[i][j][shade][label] = CalcFeatureProb(i, j, shade, label);
         }

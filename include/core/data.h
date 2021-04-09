@@ -49,8 +49,8 @@ class Data {
 
  private:
   // Shade values
-  size_t kUnshaded = 0;
-  size_t kShaded = 1;
+  const size_t kUnshaded = 0;
+  const size_t kShaded = 1;
 
   size_t image_size_;
   std::vector<Image> images_;
