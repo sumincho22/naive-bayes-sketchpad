@@ -2,8 +2,6 @@
 
 #include <string>
 
-#define ERROR_MESSAGE "Data is empty"
-
 namespace naivebayes {
 
 Data::Data(const size_t image_size) {
@@ -24,7 +22,7 @@ std::istream& operator>>(std::istream& is, Data& data) {
       image_rows.emplace_back(line);
     }
 
-    data.images_.emplace_back(Image(label, data.GetPixelShades(image_rows)));
+    data.images_.emplace_back(Image(label, data.image_size_, data.GetPixelShades(image_rows)));
   }
   return is;
 }
@@ -66,16 +64,16 @@ double Data::GetCount(const size_t row, const size_t col, const size_t shade, co
   return num_images;
 }
 
+const size_t Data::GetImageSize() const { return image_size_; }
+
+const std::vector<Image>& Data::GetImages() const { return images_; }
+
+const std::vector<size_t>& Data::GetLabels() const { return labels_; }
+
 void Data::AddLabels(const size_t label) {
   if (std::count(labels_.begin(), labels_.end(), label) == 0) {
     labels_.push_back(label);
   }
 }
-
-size_t Data::GetImageSize() const { return image_size_; }
-
-const std::vector<Image>& Data::GetImages() const { return images_; }
-
-const std::vector<size_t>& Data::GetLabels() const { return labels_; }
 
 }

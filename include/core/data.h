@@ -20,13 +20,22 @@ class Data {
    */
   Data(const size_t image_size);
 
+  /**
+   * Loads dataset from input stream and creates a list of Images
+   *
+   * @param is      the input stream
+   * @param data    the data object to modify
+   * @return        the updated input stream
+   */
+  friend std::istream& operator>>(std::istream& is, Data& data);
+
+  /**
+   * Gets the number of images in a class
+   *
+   * @param label the class label
+   * @return the number of images in a class
+   */
   double GetNumImagesInClass(const size_t label) const;
-
-  size_t GetImageSize() const;
-
-  const std::vector<Image>& GetImages() const;
-
-  const std::vector<size_t>& GetLabels() const;
 
   /**
    * Gets the count of the images in a certain class with the specific pixel shade
@@ -39,14 +48,11 @@ class Data {
    */
   double GetCount(const size_t row, const size_t col, const size_t shade, const size_t label) const;
 
-  /**
-   * Loads dataset from input stream and creates a list of Images
-   *
-   * @param is      the input stream
-   * @param data    the data object to modify
-   * @return        the updated input stream
-   */
-  friend std::istream& operator>>(std::istream& is, Data& data);
+  const size_t GetImageSize() const;
+
+  const std::vector<Image>& GetImages() const;
+
+  const std::vector<size_t>& GetLabels() const;
 
  private:
   size_t image_size_;

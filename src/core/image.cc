@@ -2,13 +2,18 @@
 
 namespace naivebayes {
 
-Image::Image(size_t label, const std::vector<std::vector<size_t>>& pixels) {
+Image::Image(const size_t label, const size_t size, const std::vector<std::vector<size_t>>& pixels) {
   label_ = label;
+  size_ = size;
   pixels_ = pixels;
 }
 
 size_t Image::GetLabel() const {
   return label_;
+}
+
+size_t Image::GetSize() const {
+  return size_;
 }
 
 size_t Image::GetShade(const size_t row, const size_t col) const {

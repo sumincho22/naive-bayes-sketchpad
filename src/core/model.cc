@@ -125,6 +125,7 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
+// TODO: Fix this method
 double Model::GetPriorProb(const size_t label) const {
 //  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
 //    if (data_.GetLabels()[i] == label) {

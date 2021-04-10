@@ -35,7 +35,7 @@ TEST_CASE("Data operator overload", "[operator]") {
   }
 
   SECTION("Check image size") {
-    REQUIRE(data.GetImageSize() == kImageSize);
+    REQUIRE(data.GetImages()[0].GetSize() == kImageSize);
   }
 }
 
@@ -44,7 +44,7 @@ TEST_CASE("Check 4 by 4 dataset", "[4by4]") {
   std::ifstream input_file(kFilePath4by4);
   input_file >> data;
 
-  REQUIRE(data.GetImageSize() == kImageSize2);
+  REQUIRE(data.GetImages()[0].GetSize() == kImageSize2);
   REQUIRE(data.GetImages().size() == kNumImages);
   REQUIRE(data.GetImages()[1].GetLabel() == 2);
 }
@@ -54,7 +54,7 @@ TEST_CASE("Check 5 by 5 dataset", "[5by5]") {
   std::ifstream input_file(kFilePath5by5);
   input_file >> data;
 
-  REQUIRE(data.GetImageSize() == kImageSize3);
+  REQUIRE(data.GetImages()[0].GetSize() == kImageSize3);
   REQUIRE(data.GetImages().size() == kNumImages);
   REQUIRE(data.GetImages()[1].GetLabel() == 3);
 }
