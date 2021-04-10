@@ -31,13 +31,13 @@ class Data {
   /**
    * Gets the count of the images in a certain class with the specific pixel shade
    *
-   * @param i       the row of image pixels
-   * @param j       the column of image pixels
+   * @param row       the row of image pixels
+   * @param col       the column of image pixels
    * @param shade   the value for shaded or unshaded (1 or 0 respectively)
    * @param label   the class label for the given image
    * @return        the number of images in a certain class with the specific pixel shade
    */
-  double GetCount(const size_t i, const size_t j, const size_t shade, const size_t label) const;
+  double GetCount(const size_t row, const size_t col, const size_t shade, const size_t label) const;
 
   /**
    * Loads dataset from input stream and creates a list of Images

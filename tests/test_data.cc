@@ -3,9 +3,6 @@
 #include "core/image.h"
 #include "core/data.h"
 
-const size_t kUnshaded = 0;
-const size_t kShaded = 1;
-
 const size_t kImageSize = 3;
 const size_t kImageSize2 = 4;
 const size_t kImageSize3 = 5;
@@ -23,11 +20,11 @@ TEST_CASE("Data operator overload", "[operator]") {
   std::ifstream input_file(kFilePath3by3);
   input_file >> data;
 
-  SECTION("Overloading empty dataset throws error") {
-    naivebayes::Data empty_data(0);
-    std::ifstream empty_file("../../../data/emptydata.txt");
-    REQUIRE_THROWS(empty_file >> empty_data);
-  }
+//  SECTION("Overloading empty dataset throws error") {
+//    naivebayes::Data empty_data(0);
+//    std::ifstream empty_file("../../../data/emptydata.txt");
+//    REQUIRE_THROWS(empty_file >> empty_data);
+//  }
 
   SECTION("Check number of images") {
     REQUIRE(data.GetImages().size() == kNumImages);
@@ -78,6 +75,6 @@ TEST_CASE("Test GetCount") {
   input_file >> data;
 
   SECTION("Test 1") {
-    REQUIRE(data.GetCount(0, 0, kUnshaded, kLabel) == 1);
+    REQUIRE(data.GetCount(0, 0, Pixel::kUnshaded, kLabel) == 1);
   }
 }

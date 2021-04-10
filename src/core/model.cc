@@ -6,7 +6,7 @@
 namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) {
-  prior_probs_ = std::vector<double>(data.GetLabels().size(), 0);
+  prior_probs_ = std::vector<double>(data_.GetLabels().size(), 0);
   feature_probs_ = QuadVector();
 }
 
@@ -126,11 +126,12 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
 }
 
 double Model::GetPriorProb(const size_t label) const {
-  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
-    if (data_.GetLabels()[i] == label) {
-      return prior_probs_[i];
-    }
-  }
+//  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
+//    if (data_.GetLabels()[i] == label) {
+//      return prior_probs_[i];
+//    }
+//  }
+  return 0;
 }
 
 double Model::GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const {
