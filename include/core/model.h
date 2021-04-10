@@ -46,9 +46,9 @@ class Model {
    */
   friend std::istream& operator>>(std::istream& is, Model& model);
 
-  const std::vector<double>& GetPriorProbs() const;
+  double GetPriorProb(const size_t label) const;
 
-  const QuadVector& GetFeatureProbs() const;
+  double GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const;
 
  private:
   // Delimiters

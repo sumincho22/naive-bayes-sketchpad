@@ -125,10 +125,16 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
-const std::vector<double>& Model::GetPriorProbs() const { return prior_probs_; }
+double Model::GetPriorProb(const size_t label) const {
+  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
+    if (data_.GetLabels()[i] == label) {
+      return prior_probs_[i];
+    }
+  }
+}
 
-const std::vector<std::vector<std::vector<std::vector<double>>>> & Model::GetFeatureProbs() const {
-  return feature_probs_;
+double Model::GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const {
+  return feature_probs_[row][col][shade][label];
 }
 
 }
