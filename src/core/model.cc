@@ -6,6 +6,7 @@
 namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) {
+  prior_probs_ = std::vector<double>(data.GetLabels().size(), 0);
   feature_probs_ = QuadVector();
 }
 
@@ -15,8 +16,8 @@ void Model::Train() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Model& model) {
-  for (const auto& prior_prob : model.prior_probs_) {
-    os << prior_prob.second << std::endl;
+  for (const double prior_prob : model.prior_probs_) {
+    os << prior_prob << std::endl;
   }
 
   os << model.kProbDelim;
@@ -51,8 +52,7 @@ std::istream& operator>>(std::istream& is, Model& model) {
   // Loading prior probabilities
   size_t index = 0;
   while (std::getline(is, line) && line[0] == model.kProbDelim) {
-    size_t label = model.data_.GetLabels()[index];
-    model.prior_probs_.insert(std::make_pair(label, std::stod(line)));
+    model.prior_probs_.push_back(std::stod(line));
     index++;
   }
 
@@ -87,7 +87,7 @@ std::istream& operator>>(std::istream& is, Model& model) {
 
 void Model::StorePriorProbs() {
   for (const size_t label : data_.GetLabels()) {
-    prior_probs_.insert(std::make_pair(label,  CalcPriorProb(label)));
+    prior_probs_.push_back(CalcPriorProb(label));
   }
 }
 
@@ -125,7 +125,7 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
-const std::map<size_t, double>& Model::GetPriorProbs() const { return prior_probs_; }
+const std::vector<double>& Model::GetPriorProbs() const { return prior_probs_; }
 
 const std::vector<std::vector<std::vector<std::vector<double>>>> & Model::GetFeatureProbs() const {
   return feature_probs_;

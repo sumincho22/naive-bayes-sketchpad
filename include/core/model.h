@@ -46,7 +46,7 @@ class Model {
    */
   friend std::istream& operator>>(std::istream& is, Model& model);
 
-  const std::map<size_t, double>& GetPriorProbs() const;
+  const std::vector<double>& GetPriorProbs() const;
 
   const QuadVector& GetFeatureProbs() const;
 
@@ -64,7 +64,7 @@ class Model {
 
   Data data_;
 
-  std::map<size_t, double> prior_probs_;
+  std::vector<double> prior_probs_;
   QuadVector feature_probs_;
 
   void StorePriorProbs();
