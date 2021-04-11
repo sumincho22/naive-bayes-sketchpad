@@ -49,16 +49,6 @@ TEST_CASE("Check 4 by 4 dataset", "[4by4]") {
   REQUIRE(data.GetImages()[1].GetLabel() == 2);
 }
 
-TEST_CASE("Check 5 by 5 dataset", "[5by5]") {
-  naivebayes::Data data(kImageSize3);
-  std::ifstream input_file(kFilePath5by5);
-  input_file >> data;
-
-  REQUIRE(data.GetImages()[0].GetSize() == kImageSize3);
-  REQUIRE(data.GetImages().size() == kNumImages);
-  REQUIRE(data.GetImages()[1].GetLabel() == 3);
-}
-
 TEST_CASE("Labels in dataset", "[labels]") {
   naivebayes::Data data(kImageSize);
   std::ifstream input_file(kFilePath3by3);

@@ -1,6 +1,7 @@
 #include "core/data.h"
 
 #include <string>
+#include <iostream>
 
 namespace naivebayes {
 

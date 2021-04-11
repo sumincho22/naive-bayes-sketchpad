@@ -2,12 +2,16 @@
 
 #include <utility>
 #include <string>
+#include <iostream>
 
 namespace naivebayes {
 
 Model::Model(Data data) : data_(std::move(data)) {
-  prior_probs_ = std::vector<double>(data_.GetLabels().size(), 0);
-  feature_probs_ = QuadVector();
+  prior_probs_ = std::vector<double>(data_.GetLabels().size());
+  feature_probs_ = QuadVector(data_.GetImageSize(), std::vector<std::vector<std::vector<double>>>
+      (data_.GetImageSize(), std::vector<std::vector<double>>
+      (kNumShades, std::vector<double>
+          (data_.GetLabels().size()))));
 }
 
 void Model::Train() {
@@ -26,7 +30,7 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
     os << std::endl;
     for (size_t i = 0; i < model.data_.GetImageSize(); ++i) {
       for (size_t j = 0; j < model.data_.GetImageSize(); ++j) {
-        for (size_t shade = 0; shade <= model.kNumShades; ++shade) {
+        for (size_t shade = 0; shade < model.kNumShades; ++shade) {
           double prob_value = model.feature_probs_[i][j][shade][label];
           if (shade == model.kNumShades) {
             os << prob_value;
@@ -47,7 +51,6 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
 
 std::istream& operator>>(std::istream& is, Model& model) {
   std::string line;
-  model.prior_probs_.clear();
 
   // Loading prior probabilities
   size_t index = 0;
@@ -86,8 +89,10 @@ std::istream& operator>>(std::istream& is, Model& model) {
 }
 
 void Model::StorePriorProbs() {
-  for (const size_t label : data_.GetLabels()) {
-    prior_probs_.push_back(CalcPriorProb(label));
+  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
+    size_t label = data_.GetLabels()[i];
+    prior_probs_[i] = CalcPriorProb(label);
+    std::cout << prior_probs_[i] << std::endl;
   }
 }
 
@@ -125,13 +130,12 @@ void Model::Split(const std::string& str, const char delim, std::vector<std::str
   }
 }
 
-// TODO: Fix this method
 double Model::GetPriorProb(const size_t label) const {
-//  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
-//    if (data_.GetLabels()[i] == label) {
-//      return prior_probs_[i];
-//    }
-//  }
+  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
+    if (data_.GetLabels()[i] == label) {
+      return prior_probs_[i];
+    }
+  }
   return 0;
 }
 

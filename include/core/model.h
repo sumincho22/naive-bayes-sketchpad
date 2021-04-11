@@ -60,7 +60,7 @@ class Model {
   const double kLaplaceSmoothing = 1.0;
 
   // Possible values: Shaded or Unshaded
-  const double kNumShades = 2.0;
+  const size_t kNumShades = 2;
 
   Data data_;
 

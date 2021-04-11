@@ -10,18 +10,17 @@ const size_t kLabel = 1;
 const size_t kNumLabels = 3;
 
 TEST_CASE("Train", "[train]") {
-//  naivebayes::Data data(kImageSize);
-//  std::ifstream input_file("../../../data/testdata_size3.txt");
-//  input_file >> data;
-//  naivebayes::Model model(data);
-//  model.Train();
-//
-//  SECTION("Prior probabilities are properly stored") {
-//    std::map<size_t, double> prior_probs = model.GetPriorProbs();
-//    REQUIRE(prior_probs[1] == Approx(3.0/7.0).epsilon(.01));
-//    REQUIRE(prior_probs[0] == Approx(1.0/3.0).epsilon(.01));
-//    REQUIRE(prior_probs[7] == Approx(1.0/3.0).epsilon(.01));
-//  }
+  naivebayes::Data data(kImageSize);
+  std::ifstream input_file("../../../data/testdata_size3.txt");
+  input_file >> data;
+  naivebayes::Model model(data);
+  model.Train();
+
+  SECTION("Prior probabilities are properly stored") {
+    REQUIRE(model.GetPriorProb(1) == Approx(3.0/7.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(0) == Approx(1.0/3.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(1) == Approx(1.0/3.0).epsilon(.01));
+  }
 //
 //  SECTION("Feature probabilities are properly stored") {
 //    REQUIRE(model.GetFeatureProbs()[0][0][1][1] == Approx(0.33).epsilon(.01));
