@@ -21,7 +21,7 @@ class Model {
    *
    * @param data the dataset of the input file
    */
-  Model(Data data);
+  Model(const Data& data);
 
   /**
    * Trains the model.
@@ -52,10 +52,7 @@ class Model {
 
  private:
   // Delimiters
-  const char kProbDelim = '&';
-  const char kShadeDelim = ',';
-  const char kPixelDelim = '|';
-  const char kLabelDelim = '*';
+  const char kDelim = ' ';
 
   const double kLaplaceSmoothing = 1.0;
 
@@ -63,6 +60,7 @@ class Model {
   const size_t kNumShades = 2;
 
   Data data_;
+  std::vector<size_t> image_labels_;
 
   std::vector<double> prior_probs_;
   QuadVector feature_probs_;
@@ -74,10 +72,6 @@ class Model {
   double CalcPriorProb(const size_t label);
 
   double CalcFeatureProb(const size_t i, const size_t j, const size_t shade, const size_t label);
-
-  // https://www.techiedelight.com/split-string-cpp-using-delimiter/
-  void Split(const std::string& str, const char delim, std::vector<std::string>& out);
-
 };
 
 }  // namespace naivebayes

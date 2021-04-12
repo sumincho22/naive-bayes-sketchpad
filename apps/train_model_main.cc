@@ -13,7 +13,7 @@ int main() {
   input_file >> data;
   naivebayes::Model model(data);
 //  model.Train();
-//
+
 //  std::ofstream save_file;
 //  save_file.open("../data/testsave.txt");
 //  save_file << model;

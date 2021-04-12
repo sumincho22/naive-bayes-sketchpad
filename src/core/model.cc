@@ -6,12 +6,13 @@
 
 namespace naivebayes {
 
-Model::Model(Data data) : data_(std::move(data)) {
-  prior_probs_ = std::vector<double>(data_.GetLabels().size());
+Model::Model(const Data& data) : data_(data) {
+  image_labels_ = data.GetLabels();
+  prior_probs_ = std::vector<double>(image_labels_.size());
   feature_probs_ = QuadVector(data_.GetImageSize(), std::vector<std::vector<std::vector<double>>>
       (data_.GetImageSize(), std::vector<std::vector<double>>
       (kNumShades, std::vector<double>
-          (data_.GetLabels().size()))));
+          (image_labels_.size()))));
 }
 
 void Model::Train() {
@@ -20,77 +21,63 @@ void Model::Train() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Model& model) {
-  for (const double prior_prob : model.prior_probs_) {
-    os << prior_prob << std::endl;
+  os << model.data_.GetImageSize() << model.kDelim;
+  os << model.image_labels_.size() << model.kDelim;
+
+  for (const size_t image_label : model.image_labels_) {
+    os << image_label << model.kDelim;
   }
 
-  os << model.kProbDelim;
+  for (const double prior_prob : model.prior_probs_) {
+    os << prior_prob << model.kDelim;
+  }
 
-  for (size_t label = 0; label < model.data_.GetLabels().size(); ++label) {
-    os << std::endl;
+  for (size_t label = 0; label < model.image_labels_.size(); ++label) {
     for (size_t i = 0; i < model.data_.GetImageSize(); ++i) {
       for (size_t j = 0; j < model.data_.GetImageSize(); ++j) {
         for (size_t shade = 0; shade < model.kNumShades; ++shade) {
-          double prob_value = model.feature_probs_[i][j][shade][label];
-          if (shade == Pixel::kShaded) {
-            os << prob_value;
-          } else {
-            os << prob_value << model.kShadeDelim;
-          }
+          os << model.feature_probs_[i][j][shade][label] << model.kDelim;
         }
-        os << model.kPixelDelim;
       }
-      os << std::endl;
-    }
-    if (label != model.data_.GetLabels().size() - 1) {
-      os << model.kLabelDelim;
     }
   }
   return os;
 }
 
 std::istream& operator>>(std::istream& is, Model& model) {
-  std::string line;
+  model.image_labels_.clear();
+  model.prior_probs_.clear();
+  model.feature_probs_.clear();
 
-  // Loading prior probabilities
-  size_t index = 0;
-  while (std::getline(is, line) && line[0] == model.kProbDelim) {
-    model.prior_probs_.push_back(std::stod(line));
-    index++;
+  size_t image_size;
+  size_t num_labels;
+
+  is >> image_size;
+  is >> num_labels;
+
+  for (size_t i = 0; i < num_labels; ++i) {
+    is >> model.image_labels_[i];
   }
 
-  size_t label = 0;
-  size_t i = 0;
-  while (std::getline(is, line)) {
-    if (line[0] == model.kLabelDelim) {
-      label++;
-      i = 0;
-      continue;
-    }
+  for (size_t i = 0; i < num_labels; ++i) {
+    is >> model.prior_probs_[i];
+  }
 
-    std::vector<std::string> pixels;
-    model.Split(line, model.kPixelDelim, pixels);
-    size_t j = 0;
-    for (const std::string& pixel : pixels) {
-      std::vector<std::string> shades;
-      model.Split(pixel, model.kShadeDelim, shades);
-
-      size_t shade_count = 0;
-      for (const std::string& shade : shades) {
-        double feature_prob = std::stod(shade);
-        model.feature_probs_[i][j][shade_count][label] = feature_prob;
-        shade_count++;
+  for (size_t label = 0; label < num_labels; ++label) {
+    for (size_t i = 0; i < image_size; ++i) {
+      for (size_t j = 0; j < image_size; ++j) {
+        for (size_t shade = 0; shade < model.kNumShades; ++shade) {
+          is >> model.feature_probs_[i][j][shade][label];
+        }
       }
-      j++;
     }
-    i++;
   }
   return is;
 }
 
 void Model::StorePriorProbs() {
-  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
-    size_t label = data_.GetLabels()[i];
+  for (size_t i = 0; i < image_labels_.size(); ++i) {
+    size_t label = image_labels_[i];
     prior_probs_[i] = CalcPriorProb(label);
   }
 }
@@ -99,8 +86,8 @@ void Model::StoreFeatureProbs() {
   for (size_t i = 0; i < data_.GetImageSize(); ++i) {
     for (size_t j = 0; j < data_.GetImageSize(); ++j) {
       for (size_t shade = 0; shade < kNumShades; ++shade) {
-        for (size_t label_index = 0; label_index < data_.GetLabels().size(); ++label_index) {
-          size_t label = data_.GetLabels()[label_index];
+        for (size_t label_index = 0; label_index < image_labels_.size(); ++label_index) {
+          size_t label = image_labels_[label_index];
           feature_probs_[i][j][shade][label_index] = CalcFeatureProb(i, j, shade, label);
         }
       }
@@ -110,7 +97,7 @@ void Model::StoreFeatureProbs() {
 
 double Model::CalcPriorProb(const size_t label) {
   double numerator = kLaplaceSmoothing + data_.GetNumImagesInClass(label);
-  double denominator = data_.GetLabels().size() * kLaplaceSmoothing + data_.GetImages().size();
+  double denominator = image_labels_.size() * kLaplaceSmoothing + data_.GetImages().size();
   return numerator / denominator;
 }
 
@@ -120,19 +107,9 @@ double Model::CalcFeatureProb(const size_t i, const size_t j, const size_t shade
   return numerator / denominator;
 }
 
-void Model::Split(const std::string& str, const char delim, std::vector<std::string>& out) {
-  size_t start;
-  size_t end = 0;
-
-  while ((start = str.find_first_not_of(delim, end)) != std::string::npos) {
-    end = str.find(delim, start);
-    out.push_back(str.substr(start, end - start));
-  }
-}
-
 double Model::GetPriorProb(const size_t label) const {
-  for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
-    if (data_.GetLabels()[i] == label) {
+  for (size_t i = 0; i < image_labels_.size(); ++i) {
+    if (image_labels_[i] == label) {
       return prior_probs_[i];
     }
   }
@@ -143,4 +120,4 @@ double Model::GetFeatureProb(const size_t row, const size_t col, const size_t sh
   return feature_probs_[row][col][shade][label];
 }
 
-}
+}  // namespace naivebayes
