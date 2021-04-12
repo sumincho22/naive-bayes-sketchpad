@@ -49,9 +49,7 @@ class Data {
   double GetCount(const size_t row, const size_t col, const size_t shade, const size_t label) const;
 
   const size_t GetImageSize() const;
-
   const std::vector<Image>& GetImages() const;
-
   const std::vector<size_t>& GetLabels() const;
 
  private:
@@ -73,7 +71,6 @@ class Data {
    * @param label the class for an image
    */
   void AddLabels(const size_t label);
-
 };
 
-}
+}  // namespace naivebayes

@@ -1,27 +1,25 @@
 #include <iostream>
-#include <fstream>
 
 #include "core/data.h"
 #include "core/model.h"
 
 int main() {
-  // TODO: Replace this with code that reads the training data, trains a model,
-  // and saves the trained model to a file.
   naivebayes::Data data(28);
   std::ifstream input_file("../data/trainingimagesandlabels.txt");
   input_file >> data;
   naivebayes::Model model(data);
   model.Train();
 
+  naivebayes::Data test_data(28);
+  std::ifstream test_file("../data/testimagesandlabels.txt");
+  test_file >> test_data;
 
-  std::ofstream save_file;
-  save_file.open("../data/testsave.txt");
-  save_file << model;
-//
-//  std::ifstream load_file;
-//  load_file.open("../data/testsave.txt");
-//  if (load_file.is_open()) {
-//    load_file >> model;
-//  }
-//  load_file.close();
+  double num_correct = 0;
+  for (const naivebayes::Image& image : test_data.GetImages()) {
+    if (image.GetLabel() == model.Classify(image.GetPixels())) {
+      num_correct++;
+    }
+  }
+  double accuracy = num_correct / test_data.GetImages().size();
+  std::cout << accuracy;
 }

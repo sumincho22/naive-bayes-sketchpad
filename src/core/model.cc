@@ -2,7 +2,7 @@
 
 #include <utility>
 #include <string>
-#include <math.h>
+#include <cmath>
 
 namespace naivebayes {
 
@@ -14,6 +14,8 @@ Model::Model(const Data &data) : data_(data) {
           image_labels_.size()))));
 }
 
+Model::Model() : data_(0) {}
+
 void Model::Train() {
   StorePriorProbs();
   StoreFeatureProbs();
@@ -21,7 +23,7 @@ void Model::Train() {
 
 size_t Model::Classify(const std::vector<std::vector<size_t>> &pixels) {
   size_t classifier = 0;
-  double max_score = -std::numeric_limits<double>::max();
+  double max_score = -1 * std::numeric_limits<double>::max();
   for (const size_t label : image_labels_) {
     double score = CalcLikelihoodScore(pixels, label);
     if (score > max_score) {
@@ -152,9 +154,6 @@ double Model::GetFeatureProb(const size_t row, const size_t col, const size_t sh
     }
   }
   return feature_probs_[row][col][shade][label_index];
-}
-Model::Model() : data_(0) {
-
 }
 
 }  // namespace naivebayes

@@ -72,6 +72,7 @@ void Sketchpad::Clear() {
     }
   }
 }
+
 const std::vector<std::vector<size_t>> &Sketchpad::GetPixelShades() const {
   return pixel_shades_;
 }

@@ -1,7 +1,6 @@
 #include "core/data.h"
 
 #include <string>
-#include <iostream>
 
 namespace naivebayes {
 
@@ -77,4 +76,4 @@ void Data::AddLabels(const size_t label) {
   }
 }
 
-}
+}  // namespace naivebayes

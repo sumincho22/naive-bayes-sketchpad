@@ -16,6 +16,10 @@ size_t Image::GetSize() const {
   return size_;
 }
 
+const std::vector<std::vector<size_t>>& Image::GetPixels() const {
+  return pixels_;
+}
+
 size_t Image::GetShade(const size_t row, const size_t col) const {
   return pixels_[row][col];
 }

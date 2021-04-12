@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ostream>
-#include <map>
 
 #include "image.h"
 #include "data.h"
@@ -24,6 +23,7 @@ class Model {
   Model(const Data& data);
 
   Model();
+
   /**
    * Trains the model.
    */
@@ -52,30 +52,21 @@ class Model {
   friend std::istream& operator>>(std::istream& is, Model& model);
 
   double GetPriorProb(const size_t label) const;
-
   double GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const;
 
  private:
-  // Delimiters
   const char kDelim = ' ';
-
   const double kLaplaceSmoothing = 1.0;
-
-  // Possible values: Shaded or Unshaded
   const size_t kNumShades = 2;
 
   Data data_;
   std::vector<size_t> image_labels_;
-
   std::vector<double> prior_probs_;
   QuadVector feature_probs_;
 
   void StorePriorProbs();
-
   void StoreFeatureProbs();
-
   double CalcPriorProb(const size_t label);
-
   double CalcFeatureProb(const size_t i, const size_t j, const size_t shade, const size_t label);
 };
 
