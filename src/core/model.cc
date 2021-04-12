@@ -20,7 +20,16 @@ void Model::Train() {
 }
 
 size_t Model::Classify(const Image &image) {
-
+  size_t classifier = 0;
+  double max_score = -std::numeric_limits<double>::max();
+  for (const size_t label : image_labels_) {
+    double score = CalcLikelihoodScore(image, label);
+    if (score > max_score) {
+      classifier = label;
+      max_score = score;
+    }
+  }
+  return classifier;
 }
 
 double Model::CalcLikelihoodScore(const Image& image, const size_t label) {
