@@ -23,14 +23,14 @@ TEST_CASE("Train", "[train]") {
   }
 
   SECTION("Feature probabilities are properly stored") {
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 0, Pixel::kUnshaded, kLabel) == Approx(1.0/2.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 0, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 0, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
   }
 }

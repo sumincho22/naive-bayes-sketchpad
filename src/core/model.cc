@@ -2,17 +2,15 @@
 
 #include <utility>
 #include <string>
-#include <iostream>
 
 namespace naivebayes {
 
 Model::Model(const Data& data) : data_(data) {
   image_labels_ = data.GetLabels();
   prior_probs_ = std::vector<double>(image_labels_.size());
-  feature_probs_ = QuadVector(data_.GetImageSize(), std::vector<std::vector<std::vector<double>>>
-      (data_.GetImageSize(), std::vector<std::vector<double>>
-      (kNumShades, std::vector<double>
-          (image_labels_.size()))));
+  feature_probs_ = QuadVector(data_.GetImageSize(), std::vector<std::vector<std::vector<double>>>(
+      data_.GetImageSize(), std::vector<std::vector<double>>(kNumShades,std::vector<double>(
+          image_labels_.size()))));
 }
 
 void Model::Train() {
@@ -117,7 +115,14 @@ double Model::GetPriorProb(const size_t label) const {
 }
 
 double Model::GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const {
-  return feature_probs_[row][col][shade][label];
+  size_t label_index = 0;
+  for (size_t i = 0; i < image_labels_.size(); ++i) {
+    if (image_labels_[i] == label) {
+      label_index = i;
+      break;
+    }
+  }
+  return feature_probs_[row][col][shade][label_index];
 }
 
 }  // namespace naivebayes
