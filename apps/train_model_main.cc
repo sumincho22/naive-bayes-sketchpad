@@ -7,20 +7,12 @@
 int main() {
   // TODO: Replace this with code that reads the training data, trains a model,
   // and saves the trained model to a file.
-  naivebayes::Data data(3);
-  std::ifstream input_file("../data/testdata_size3.txt");
+  naivebayes::Data data(28);
+  std::ifstream input_file("../data/trainingimagesandlabels.txt");
   input_file >> data;
   naivebayes::Model model(data);
   model.Train();
 
-//  for (size_t i = 0; i < data.GetImageSize(); ++i) {
-//    for (size_t j = 0; j < data.GetImageSize(); ++j) {
-//      std::cout << "i: " << i << std::endl;
-//      std::cout << "j: " << j << std::endl;
-//      std::cout << model.GetFeatureProb(i, j, Pixel::kUnshaded, 1) << std::endl;
-//      std::cout << std::endl;
-//    }
-//  }
 
   std::ofstream save_file;
   save_file.open("../data/testsave.txt");

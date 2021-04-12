@@ -6,11 +6,11 @@
 
 namespace naivebayes {
 
-Model::Model(const Data& data) : data_(data) {
+Model::Model(const Data &data) : data_(data) {
   image_labels_ = data.GetLabels();
   prior_probs_ = std::vector<double>(image_labels_.size());
   feature_probs_ = QuadVector(data_.GetImageSize(), std::vector<std::vector<std::vector<double>>>(
-      data_.GetImageSize(), std::vector<std::vector<double>>(kNumShades,std::vector<double>(
+      data_.GetImageSize(), std::vector<std::vector<double>>(kNumShades, std::vector<double>(
           image_labels_.size()))));
 }
 
@@ -19,11 +19,11 @@ void Model::Train() {
   StoreFeatureProbs();
 }
 
-size_t Model::Classify(const Image &image) {
+size_t Model::Classify(const std::vector<std::vector<size_t>> &pixels) {
   size_t classifier = 0;
   double max_score = -std::numeric_limits<double>::max();
   for (const size_t label : image_labels_) {
-    double score = CalcLikelihoodScore(image, label);
+    double score = CalcLikelihoodScore(pixels, label);
     if (score > max_score) {
       classifier = label;
       max_score = score;
@@ -32,17 +32,17 @@ size_t Model::Classify(const Image &image) {
   return classifier;
 }
 
-double Model::CalcLikelihoodScore(const Image& image, const size_t label) {
+double Model::CalcLikelihoodScore(const std::vector<std::vector<size_t>> &pixels, const size_t label) {
   double likelihood_score = log(CalcPriorProb(label));
   for (size_t i = 0; i < data_.GetImageSize(); ++i) {
     for (size_t j = 0; j < data_.GetImageSize(); ++j) {
-      likelihood_score += log(CalcFeatureProb(i, j, image.GetShade(i, j), label));
+      likelihood_score += log(CalcFeatureProb(i, j, pixels[i][j], label));
     }
   }
   return likelihood_score;
 }
 
-std::ostream& operator<<(std::ostream& os, const Model& model) {
+std::ostream &operator<<(std::ostream &os, const Model &model) {
   os << model.data_.GetImageSize() << model.kDelim;
   os << model.image_labels_.size() << model.kDelim;
 
@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
   return os;
 }
 
-std::istream& operator>>(std::istream& is, Model& model) {
+std::istream &operator>>(std::istream &is, Model &model) {
   model.image_labels_.clear();
   model.prior_probs_.clear();
   model.feature_probs_.clear();
@@ -77,14 +77,19 @@ std::istream& operator>>(std::istream& is, Model& model) {
   is >> image_size;
   is >> num_labels;
 
+  model.image_labels_.resize(num_labels);
   for (size_t i = 0; i < num_labels; ++i) {
     is >> model.image_labels_[i];
   }
 
+  model.prior_probs_.resize(num_labels);
   for (size_t i = 0; i < num_labels; ++i) {
     is >> model.prior_probs_[i];
   }
 
+  model.feature_probs_ = QuadVector(image_size, std::vector<std::vector<std::vector<double>>>(
+      image_size, std::vector<std::vector<double>>(model.kNumShades, std::vector<double>(
+          num_labels))));
   for (size_t label = 0; label < num_labels; ++label) {
     for (size_t i = 0; i < image_size; ++i) {
       for (size_t j = 0; j < image_size; ++j) {
@@ -147,6 +152,9 @@ double Model::GetFeatureProb(const size_t row, const size_t col, const size_t sh
     }
   }
   return feature_probs_[row][col][shade][label_index];
+}
+Model::Model() : data_(0) {
+
 }
 
 }  // namespace naivebayes

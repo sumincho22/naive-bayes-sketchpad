@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/model.h>
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
@@ -31,6 +32,7 @@ class NaiveBayesApp : public ci::app::App {
  private:
   Sketchpad sketchpad_;
   int current_prediction_ = -1;
+  Model model_;
 };
 
 }  // namespace visualizer

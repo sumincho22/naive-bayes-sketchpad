@@ -49,6 +49,8 @@ class Sketchpad {
    */
   void Clear();
 
+  const std::vector<std::vector<size_t>> &GetPixelShades() const;
+
  private:
   glm::vec2 top_left_corner_;
 
@@ -58,6 +60,8 @@ class Sketchpad {
   double pixel_side_length_;
 
   double brush_radius_;
+
+  std::vector<std::vector<size_t>> pixel_shades_;
 };
 
 }  // namespace visualizer

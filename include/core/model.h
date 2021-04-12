@@ -23,14 +23,15 @@ class Model {
    */
   Model(const Data& data);
 
+  Model();
   /**
    * Trains the model.
    */
   void Train();
 
-  size_t Classify(const Image& image);
+  size_t Classify(const std::vector<std::vector<size_t>> &pixels);
 
-  double CalcLikelihoodScore(const Image& image, const size_t label);
+  double CalcLikelihoodScore(const std::vector<std::vector<size_t>> &pixels, const size_t label);
 
   /**
    * Saves the probabilities by writing them onto a .txt file
