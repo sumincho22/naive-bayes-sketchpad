@@ -18,19 +18,19 @@ TEST_CASE("Train", "[train]") {
 
   SECTION("Prior probabilities are properly stored") {
     REQUIRE(model.GetPriorProb(1) == Approx(3.0/7.0).epsilon(.01));
-    REQUIRE(model.GetPriorProb(0) == Approx(1.0/3.0).epsilon(.01));
-    REQUIRE(model.GetPriorProb(1) == Approx(1.0/3.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(7) == Approx(2.0/7.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(0) == Approx(2.0/7.0).epsilon(.01));
   }
-//
-//  SECTION("Feature probabilities are properly stored") {
-//    REQUIRE(model.GetFeatureProbs()[0][0][1][1] == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[0][1][1][1] == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[0][2][1][1] == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[1][0][1][1] == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[1][1][1][1] == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[1][2][1][1] == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[2][0][1][1] == Approx(0.33).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[2][1][1][1] == Approx(0.67).epsilon(.01));
-//    REQUIRE(model.GetFeatureProbs()[2][2][1][1] == Approx(0.33).epsilon(.01));
-//  }
+
+  SECTION("Feature probabilities are properly stored") {
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.67).epsilon(.01));
+//    REQUIRE(model.GetFeatureProb() == Approx(0.33).epsilon(.01));
+  }
 }

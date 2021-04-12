@@ -12,11 +12,16 @@ int main() {
   std::ifstream input_file("../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
-  model.Train();
+//  model.Train();
+//
+//  std::ofstream save_file;
+//  save_file.open("../data/testsave.txt");
+//  save_file << model;
 
-//  std::ofstream output_file;
-//  output_file.open("../data/testsave.txt");
-//  output_file << model;
-//  output_file.close();
-
+  std::ifstream load_file;
+  load_file.open("../data/testsave.txt");
+  if (load_file.is_open()) {
+    load_file >> model;
+  }
+  load_file.close();
 }

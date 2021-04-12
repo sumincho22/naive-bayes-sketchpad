@@ -32,7 +32,7 @@ std::ostream& operator<<(std::ostream& os, const Model& model) {
       for (size_t j = 0; j < model.data_.GetImageSize(); ++j) {
         for (size_t shade = 0; shade < model.kNumShades; ++shade) {
           double prob_value = model.feature_probs_[i][j][shade][label];
-          if (shade == model.kNumShades) {
+          if (shade == Pixel::kShaded) {
             os << prob_value;
           } else {
             os << prob_value << model.kShadeDelim;
@@ -92,7 +92,6 @@ void Model::StorePriorProbs() {
   for (size_t i = 0; i < data_.GetLabels().size(); ++i) {
     size_t label = data_.GetLabels()[i];
     prior_probs_[i] = CalcPriorProb(label);
-    std::cout << prior_probs_[i] << std::endl;
   }
 }
 
@@ -100,8 +99,9 @@ void Model::StoreFeatureProbs() {
   for (size_t i = 0; i < data_.GetImageSize(); ++i) {
     for (size_t j = 0; j < data_.GetImageSize(); ++j) {
       for (size_t shade = 0; shade < kNumShades; ++shade) {
-        for (size_t label = 0; label < data_.GetLabels().size(); ++label) {
-          feature_probs_[i][j][shade][label] = CalcFeatureProb(i, j, shade, label);
+        for (size_t label_index = 0; label_index < data_.GetLabels().size(); ++label_index) {
+          size_t label = data_.GetLabels()[label_index];
+          feature_probs_[i][j][shade][label_index] = CalcFeatureProb(i, j, shade, label);
         }
       }
     }
