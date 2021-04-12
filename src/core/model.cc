@@ -21,7 +21,17 @@ void Model::Train() {
   StoreFeatureProbs();
 }
 
-size_t Model::Classify(const std::vector<std::vector<size_t>> &pixels) {
+double Model::CalcAccuracy(const std::vector<Image> &images) {
+  double num_correct = 0;
+  for (const naivebayes::Image& image : images) {
+    if (Classify(image.GetPixels()) == image.GetLabel()) {
+      num_correct++;
+    }
+  }
+  return num_correct / images.size();
+}
+
+size_t Model::Classify(const std::vector<std::vector<size_t>>& pixels) {
   size_t classifier = 0;
   double max_score = -1 * std::numeric_limits<double>::max();
   for (const size_t label : image_labels_) {
@@ -34,7 +44,7 @@ size_t Model::Classify(const std::vector<std::vector<size_t>> &pixels) {
   return classifier;
 }
 
-double Model::CalcLikelihoodScore(const std::vector<std::vector<size_t>> &pixels, const size_t label) {
+double Model::CalcLikelihoodScore(const std::vector<std::vector<size_t>>& pixels, const size_t label) {
   double likelihood_score = log(CalcPriorProb(label));
   for (size_t i = 0; i < data_.GetImageSize(); ++i) {
     for (size_t j = 0; j < data_.GetImageSize(); ++j) {

@@ -19,8 +19,8 @@ class Image {
    */
   Image(const size_t label, const size_t size, const std::vector<std::vector<size_t>>& pixels);
 
-  size_t GetLabel() const;
-  size_t GetSize() const;
+  const size_t& GetLabel() const;
+  const size_t& GetSize() const;
   const std::vector<std::vector<size_t>>& GetPixels() const;
   size_t Image::GetShade(const size_t row, const size_t col) const;
 

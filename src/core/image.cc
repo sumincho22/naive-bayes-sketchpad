@@ -8,11 +8,11 @@ Image::Image(const size_t label, const size_t size, const std::vector<std::vecto
   pixels_ = pixels;
 }
 
-size_t Image::GetLabel() const {
+const size_t& Image::GetLabel() const {
   return label_;
 }
 
-size_t Image::GetSize() const {
+const size_t& Image::GetSize() const {
   return size_;
 }
 

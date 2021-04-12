@@ -13,13 +13,4 @@ int main() {
   naivebayes::Data test_data(28);
   std::ifstream test_file("../data/testimagesandlabels.txt");
   test_file >> test_data;
-
-  double num_correct = 0;
-  for (const naivebayes::Image& image : test_data.GetImages()) {
-    if (image.GetLabel() == model.Classify(image.GetPixels())) {
-      num_correct++;
-    }
-  }
-  double accuracy = num_correct / test_data.GetImages().size();
-  std::cout << accuracy;
 }
