@@ -28,6 +28,10 @@ class Model {
    */
   void Train();
 
+  size_t Classify(const Image& image);
+
+  double CalcLikelihoodScore(const Image& image, const size_t label);
+
   /**
    * Saves the probabilities by writing them onto a .txt file
    *

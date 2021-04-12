@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <string>
+#include <math.h>
 
 namespace naivebayes {
 
@@ -16,6 +17,20 @@ Model::Model(const Data& data) : data_(data) {
 void Model::Train() {
   StorePriorProbs();
   StoreFeatureProbs();
+}
+
+size_t Model::Classify(const Image &image) {
+
+}
+
+double Model::CalcLikelihoodScore(const Image& image, const size_t label) {
+  double likelihood_score = log(CalcPriorProb(label));
+  for (size_t i = 0; i < data_.GetImageSize(); ++i) {
+    for (size_t j = 0; j < data_.GetImageSize(); ++j) {
+      likelihood_score += log(CalcFeatureProb(i, j, image.GetShade(i, j), label));
+    }
+  }
+  return likelihood_score;
 }
 
 std::ostream& operator<<(std::ostream& os, const Model& model) {
