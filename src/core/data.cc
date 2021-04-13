@@ -7,14 +7,14 @@ namespace naivebayes {
 Data::Data(const size_t image_size) {
   image_size_ = image_size;
   images_ = std::vector<Image>();
-  labels_ = std::vector<size_t>();
+  num_images_in_class_ = std::vector<size_t>(kNumLabels, 0);
 }
 
 std::istream& operator>>(std::istream& is, Data& data) {
   std::string line;
   while (std::getline(is, line)) {
     size_t label = std::stoi(line);
-    data.AddLabels(label);
+    data.num_images_in_class_[label]++;
 
     std::vector<std::string> image_rows;
     for (size_t i = 0; i < data.image_size_; ++i) {
@@ -45,35 +45,11 @@ std::vector<std::vector<size_t>> Data::GetPixelShades(std::vector<std::string>& 
 }
 
 double Data::GetNumImagesInClass(const size_t label) const {
-  double num_images_in_class = 0;
-  for (const Image& image : images_) {
-    if (image.GetLabel() == label) {
-      num_images_in_class++;
-    }
-  }
-  return num_images_in_class;
-}
-
-double Data::GetCount(const size_t row, const size_t col, const size_t shade, const size_t label) const {
-  double num_images = 0;
-  for (const Image& image : images_) {
-    if (image.GetLabel() == label && image.GetShade(row, col) == shade) {
-      num_images++;
-    }
-  }
-  return num_images;
+  return num_images_in_class_[label];
 }
 
 const size_t Data::GetImageSize() const { return image_size_; }
 
 const std::vector<Image>& Data::GetImages() const { return images_; }
-
-const std::vector<size_t>& Data::GetLabels() const { return labels_; }
-
-void Data::AddLabels(const size_t label) {
-  if (std::count(labels_.begin(), labels_.end(), label) == 0) {
-    labels_.push_back(label);
-  }
-}
 
 }  // namespace naivebayes

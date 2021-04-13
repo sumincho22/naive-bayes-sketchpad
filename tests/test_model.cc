@@ -17,9 +17,9 @@ TEST_CASE("Train", "[train]") {
   model.Train();
 
   SECTION("Prior probabilities are properly stored") {
-    REQUIRE(model.GetPriorProb(1) == Approx(3.0/7.0).epsilon(.01));
-    REQUIRE(model.GetPriorProb(7) == Approx(2.0/7.0).epsilon(.01));
-    REQUIRE(model.GetPriorProb(0) == Approx(2.0/7.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(1) == Approx(3.0/14.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(7) == Approx(2.0/14.0).epsilon(.01));
+    REQUIRE(model.GetPriorProb(0) == Approx(2.0/14.0).epsilon(.01));
   }
 
   SECTION("Feature probabilities are properly stored") {

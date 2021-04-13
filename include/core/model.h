@@ -60,16 +60,17 @@ class Model {
   const char kDelim = ' ';
   const double kLaplaceSmoothing = 1.0;
   const size_t kNumShades = 2;
+  const size_t kNumLabels = 10;
 
   Data data_;
-  std::vector<size_t> image_labels_;
+  std::vector<size_t> num_images_in_class_with_shade_;
   std::vector<double> prior_probs_;
   QuadVector feature_probs_;
 
   void StorePriorProbs();
   void StoreFeatureProbs();
   double CalcPriorProb(const size_t label);
-  double CalcFeatureProb(const size_t i, const size_t j, const size_t shade, const size_t label);
+  double CalcFeatureProb(const size_t label);
 };
 
 }  // namespace naivebayes

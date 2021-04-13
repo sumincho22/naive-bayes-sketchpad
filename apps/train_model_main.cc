@@ -13,4 +13,6 @@ int main() {
   naivebayes::Data test_data(28);
   std::ifstream test_file("../data/testimagesandlabels.txt");
   test_file >> test_data;
+
+  std::cout << model.CalcAccuracy(test_data.GetImages());
 }

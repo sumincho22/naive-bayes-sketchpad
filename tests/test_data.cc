@@ -48,23 +48,3 @@ TEST_CASE("Check 4 by 4 dataset", "[4by4]") {
   REQUIRE(data.GetImages().size() == kNumImages);
   REQUIRE(data.GetImages()[1].GetLabel() == 2);
 }
-
-TEST_CASE("Labels in dataset", "[labels]") {
-  naivebayes::Data data(kImageSize);
-  std::ifstream input_file(kFilePath3by3);
-  input_file >> data;
-
-  SECTION("Check number of labels") {
-    REQUIRE(data.GetLabels().size() == kNumLabels);
-  }
-}
-
-TEST_CASE("Test GetCount") {
-  naivebayes::Data data(kImageSize);
-  std::ifstream input_file(kFilePath3by3);
-  input_file >> data;
-
-  SECTION("Test 1") {
-    REQUIRE(data.GetCount(0, 0, Pixel::kUnshaded, kLabel) == 1);
-  }
-}
