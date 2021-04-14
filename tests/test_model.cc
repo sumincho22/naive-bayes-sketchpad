@@ -9,7 +9,7 @@ const size_t kNumImages = 4;
 const size_t kLabel = 1;
 
 TEST_CASE("Train", "[train]") {
-  naivebayes::Data data(kImageSize);
+  naivebayes::Data data(3);
   std::ifstream input_file("../../../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
@@ -32,6 +32,23 @@ TEST_CASE("Train", "[train]") {
     REQUIRE(model.GetFeatureProb(2, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
     REQUIRE(model.GetFeatureProb(2, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
   }
+}
+
+TEST_CASE("Classify", "[classify]") {
+  std::vector<std::vector<size_t>> pixels
+  {
+      {kUnshaded, kShaded, kUnshaded},
+      {kUnshaded, kShaded, kUnshaded},
+      {kUnshaded, kShaded, kUnshaded}
+  };
+
+  naivebayes::Data data(3);
+  std::ifstream input_file("../../../data/testdata_size3.txt");
+  input_file >> data;
+  naivebayes::Model model(data);
+  model.Train();
+
+ REQUIRE(model.Classify(pixels) == 1);
 }
 
 TEST_CASE("CalcAccuracy", "[calc_accuracy]") {
