@@ -1,13 +1,13 @@
 #include <catch2/catch.hpp>
+#include <iostream>
 
 #include "core/image.h"
 #include "core/data.h"
 #include "core/model.h"
 
-const size_t kImageSize = 3;
-const size_t kNumImages = 4;
-const size_t kLabel = 1;
-
+const double kMinAccuracy = 0.7;
+const size_t kTestSize = 3;
+const size_t kActualSize = 28;
 const std::vector<std::vector<size_t>> kPixels
     {
         {kUnshaded, kShaded, kUnshaded},
@@ -16,7 +16,7 @@ const std::vector<std::vector<size_t>> kPixels
     };
 
 TEST_CASE("Train", "[train]") {
-  naivebayes::Data data(3);
+  naivebayes::Data data(kTestSize);
   std::ifstream input_file("../../../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
@@ -29,20 +29,20 @@ TEST_CASE("Train", "[train]") {
   }
 
   SECTION("Feature probabilities are properly stored") {
-    REQUIRE(model.GetFeatureProb(0, 0, Pixel::kUnshaded, kLabel) == Approx(1.0/2.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(0, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(0, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(1, 0, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(1, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(1, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(2, 0, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(2, 1, Pixel::kUnshaded, kLabel) == Approx(1.0/4.0).epsilon(.01));
-    REQUIRE(model.GetFeatureProb(2, 2, Pixel::kUnshaded, kLabel) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 0, kUnshaded, 1) == Approx(1.0/2.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 1, kUnshaded, 1) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(0, 2, kUnshaded, 1) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 0, kUnshaded, 1) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 1, kUnshaded, 1) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(1, 2, kUnshaded, 1) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 0, kUnshaded, 1) == Approx(3.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 1, kUnshaded, 1) == Approx(1.0/4.0).epsilon(.01));
+    REQUIRE(model.GetFeatureProb(2, 2, kUnshaded, 1) == Approx(3.0/4.0).epsilon(.01));
   }
 }
 
 TEST_CASE("CalcLikelihoodScore", "[likelihood_score]") {
-  naivebayes::Data data(3);
+  naivebayes::Data data(kTestSize);
   std::ifstream input_file("../../../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
@@ -58,7 +58,7 @@ TEST_CASE("CalcLikelihoodScore", "[likelihood_score]") {
 }
 
 TEST_CASE("Classify", "[classify]") {
-  naivebayes::Data data(3);
+  naivebayes::Data data(kTestSize);
   std::ifstream input_file("../../../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
@@ -68,13 +68,13 @@ TEST_CASE("Classify", "[classify]") {
 }
 
 TEST_CASE("CalcAccuracy", "[calc_accuracy]") {
-  naivebayes::Data data(28);
+  naivebayes::Data data(kActualSize);
   std::ifstream input_file("../../../data/trainingimagesandlabels.txt");
   input_file >> data;
   naivebayes::Model model(data);
   model.Train();
 
-  naivebayes::Data test_data(28);
+  naivebayes::Data test_data(kActualSize);
   std::ifstream test_file("../../../data/testimagesandlabels.txt");
   test_file >> test_data;
 
@@ -86,6 +86,6 @@ TEST_CASE("CalcAccuracy", "[calc_accuracy]") {
   }
 
   double accuracy = model.CalcAccuracy(test_data.GetImages());
-  REQUIRE(accuracy >= 0.7);
+  REQUIRE(accuracy >= kMinAccuracy);
   REQUIRE(accuracy == num_correct / test_data.GetImages().size());
 }

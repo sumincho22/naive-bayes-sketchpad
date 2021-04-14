@@ -8,7 +8,7 @@ NaiveBayesApp::NaiveBayesApp()
     : sketchpad_(glm::vec2(kMargin, kMargin), kImageDimension,
                  kWindowSize - 2 * kMargin) , model_(kImageDimension){
   std::ifstream is;
-  is.open("../../../data/testsave.txt");
+  is.open("../../../data/save_data.txt");
   is >> model_;
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
