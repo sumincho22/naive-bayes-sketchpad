@@ -41,6 +41,24 @@ TEST_CASE("Train", "[train]") {
   }
 }
 
+TEST_CASE("operator<<", "[op<<]") {
+  naivebayes::Data data(kTestSize);
+  std::ifstream input_file("../../../data/testdata_size3.txt");
+  input_file >> data;
+  naivebayes::Model model(data);
+  model.Train();
+
+  std::fstream test_file("../../../data/test_file.txt");
+  test_file << model;
+  test_file.close();
+
+  test_file.open("../../../data/test_file.txt");
+  size_t first_value;
+  test_file >> first_value;
+
+  REQUIRE(first_value == kTestSize);
+}
+
 TEST_CASE("CalcLikelihoodScore", "[likelihood_score]") {
   naivebayes::Data data(kTestSize);
   std::ifstream input_file("../../../data/testdata_size3.txt");
