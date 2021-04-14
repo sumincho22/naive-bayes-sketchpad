@@ -8,6 +8,13 @@ const size_t kImageSize = 3;
 const size_t kNumImages = 4;
 const size_t kLabel = 1;
 
+const std::vector<std::vector<size_t>> kPixels
+    {
+        {kUnshaded, kShaded, kUnshaded},
+        {kUnshaded, kShaded, kUnshaded},
+        {kUnshaded, kShaded, kUnshaded}
+    };
+
 TEST_CASE("Train", "[train]") {
   naivebayes::Data data(3);
   std::ifstream input_file("../../../data/testdata_size3.txt");
@@ -34,21 +41,30 @@ TEST_CASE("Train", "[train]") {
   }
 }
 
-TEST_CASE("Classify", "[classify]") {
-  std::vector<std::vector<size_t>> pixels
-  {
-      {kUnshaded, kShaded, kUnshaded},
-      {kUnshaded, kShaded, kUnshaded},
-      {kUnshaded, kShaded, kUnshaded}
-  };
-
+TEST_CASE("CalcLikelihoodScore", "[likelihood_score]") {
   naivebayes::Data data(3);
   std::ifstream input_file("../../../data/testdata_size3.txt");
   input_file >> data;
   naivebayes::Model model(data);
   model.Train();
 
- REQUIRE(model.Classify(pixels) == 1);
+  REQUIRE(model.CalcLikelihoodScore(kPixels, 0) == Approx(-10.4471).epsilon(.01));
+  REQUIRE(model.CalcLikelihoodScore(kPixels, 1) == Approx(-4.53505).epsilon(.01));
+  REQUIRE(model.CalcLikelihoodScore(kPixels, 7) == Approx(-8.36768).epsilon(.01));
+
+  // For class labels that are not in the dataset
+  REQUIRE(model.CalcLikelihoodScore(kPixels, 9) == Approx(-8.87738).epsilon(.01));
+  REQUIRE(model.CalcLikelihoodScore(kPixels, 5) == Approx(-8.87738).epsilon(.01));
+}
+
+TEST_CASE("Classify", "[classify]") {
+  naivebayes::Data data(3);
+  std::ifstream input_file("../../../data/testdata_size3.txt");
+  input_file >> data;
+  naivebayes::Model model(data);
+  model.Train();
+
+ REQUIRE(model.Classify(kPixels) == 1);
 }
 
 TEST_CASE("CalcAccuracy", "[calc_accuracy]") {
