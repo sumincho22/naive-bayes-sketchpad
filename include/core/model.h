@@ -29,12 +29,6 @@ class Model {
    */
   void Train();
 
-  double CalcAccuracy(const std::vector<Image>& images);
-
-  size_t Classify(const std::vector<std::vector<size_t>>& pixels);
-
-  double CalcLikelihoodScore(const std::vector<std::vector<size_t>>& pixels, const size_t label);
-
   /**
    * Saves the probabilities by writing them onto a .txt file
    *
@@ -52,6 +46,18 @@ class Model {
    * @return        updated input stream
    */
   friend std::istream& operator>>(std::istream& is, Model& model);
+
+  /**
+   * Classifies the pixels of an image as the class label with the highest likelihood score.
+   *
+   * @param pixels the pixel shades of an image
+   * @return the class label with the highest likelihood score
+   */
+  size_t Classify(const std::vector<std::vector<size_t>>& pixels);
+
+  double CalcLikelihoodScore(const std::vector<std::vector<size_t>>& pixels, const size_t label);
+
+  double CalcAccuracy(const std::vector<Image>& images);
 
   double GetPriorProb(const size_t label) const;
   double GetFeatureProb(const size_t row, const size_t col, const size_t shade, const size_t label) const;
