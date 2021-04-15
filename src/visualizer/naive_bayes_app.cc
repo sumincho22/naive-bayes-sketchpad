@@ -6,7 +6,7 @@ namespace visualizer {
 
 NaiveBayesApp::NaiveBayesApp()
     : sketchpad_(glm::vec2(kMargin, kMargin), kImageDimension,
-                 kWindowSize - 2 * kMargin) , model_(kImageDimension){
+                 kWindowSize - 2 * kMargin), model_(kImageDimension){
   std::ifstream is;
   is.open("../../../data/save_data.txt");
   is >> model_;
@@ -40,8 +40,6 @@ void NaiveBayesApp::keyDown(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_RETURN:
       current_prediction_ = static_cast<int>(model_.Classify(sketchpad_.GetPixelShades()));
-      // ask your classifier to classify the image that's currently drawn on the
-      // sketchpad and update current_prediction_
       break;
 
     case ci::app::KeyEvent::KEY_DELETE:

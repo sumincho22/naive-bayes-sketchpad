@@ -1,4 +1,5 @@
 #include <visualizer/sketchpad.h>
+#include <core/pixel.h>
 
 namespace naivebayes {
 
@@ -13,8 +14,8 @@ Sketchpad::Sketchpad(const vec2& top_left_corner, size_t num_pixels_per_side,
       pixel_side_length_(sketchpad_size / num_pixels_per_side),
       brush_radius_(brush_radius) {
   pixel_shades_.resize(num_pixels_per_side);
-  for (auto& row : pixel_shades_) {
-    row.resize(num_pixels_per_side);
+  for (auto& image_row : pixel_shades_) {
+    image_row.resize(num_pixels_per_side);
   }
 }
 
@@ -24,9 +25,8 @@ void Sketchpad::Draw() const {
       // Currently, this will draw a quarter circle centered at the top-left
       // corner with a radius of 20
 
-      // TODO: Replace the if-statement below with an if-statement that checks
       // if the pixel at (row, col) is currently shaded
-      if (pixel_shades_[row][col] == 1) { //TODO: Make it a constant
+      if (pixel_shades_[row][col] == Pixel::kShaded) {
         ci::gl::color(ci::Color::gray(0.3f));
       } else {
         ci::gl::color(ci::Color("white"));
@@ -57,18 +57,16 @@ void Sketchpad::HandleBrush(const vec2& brush_screen_coords) {
 
       if (glm::distance(brush_sketchpad_coords, pixel_center) <=
           brush_radius_) {
-        // TODO: Add code to shade in the pixel at (row, col)
-        pixel_shades_[row][col] = 1; //TODO: Change
+        pixel_shades_[row][col] = Pixel::kShaded;
       }
     }
   }
 }
 
 void Sketchpad::Clear() {
-  // TODO: implement this method
-  for (auto& row : pixel_shades_) {
+  for (auto& image_row : pixel_shades_) {
     for (size_t pixel = 0; pixel < num_pixels_per_side_; ++pixel) {
-      row[pixel] = 0;
+      image_row[pixel] = Pixel::kUnshaded;
     }
   }
 }
